@@ -6,7 +6,7 @@ from features.steps.environment import Environment
 
 class PhotomosaicAccessor(object):
     def __init__(self):
-        self.base_url = Environment().photomosaic_api_url
+        self.base_url = f'{Environment().mosaic_api_url_external}'
 
     def get(self, endpoint, **kwargs):
         url = f'{self.base_url}{endpoint}'
@@ -28,8 +28,14 @@ class PhotomosaicAccessor(object):
         url = f'{self.base_url}{endpoint}'
         return requests.delete(url, **kwargs)
 
-    def delete_user(self, username):
-        return self.delete(f'/users/{username}')
+    def get_auth_header(self, role):
+        password = Environment().behave_password
+        username = Environment().__getattr__(f'{role.lower()}_username')
+        return self.login(username=username, password=password).json()
+
+    def delete_user(self, username, headers=None):
+        headers = {} if not headers else headers
+        return self.delete(f'/users/{username}', headers=headers)
 
     def register(self, username=None, email=None, password=None):
         user_info = {
@@ -53,32 +59,41 @@ class PhotomosaicAccessor(object):
         }
         return self.post('/login', json=user_info)
 
-    def create_user(self, username=None, password=None, email=None):
-        resp = self.delete_user(username=username)
+    def create_user(self, username=None, password=None, email=None, auth=None):
+        auth = auth if auth else self.get_auth_header('admin')
+        resp = self.delete_user(username=username, headers=auth)
         print(resp.text)
         resp = self.register(username=username, password=password, email=email)
         print(resp.text)
         return self.validate(username=username, password=password)
 
-    def upload_file(self, username, fp):
+    def upload_file(self, username, fp, headers=None):
+        headers = headers if headers else {}
         url = f'/users/{username}/uploads'
         print(url)
         print(fp)
         with open(fp, 'rb') as fn:
-            resp = self.post(url, files={'file': fn})
+            resp = self.post(url, files={'file': fn}, headers=headers)
         return resp
 
-    def send_message(self, username, file_id, enlargement, tile_size):
+    def send_message(self, username, file_id, enlargement, tile_size, headers=None):
+        headers = headers if headers else {}
         message_info = {
             'file_id': file_id,
             'enlargement': enlargement,
             'tile_size': tile_size
         }
-        return self.post(f'/users/{username}/messages', json=message_info)
+        return self.post(f'/users/{username}/messages', json=message_info, headers=headers)
 
-    def get_pending(self, username, as_json=True):
+    def get_pending(self, username, as_json=True, headers=None):
+        headers = headers if headers else {}
         url = f'/users/{username}/pending{"_json" if as_json else ""}'
-        return self.get(url)
+        return self.get(url, headers=headers)
 
     def get_image(self, file_id):
         return self.get(f'/images/{file_id}')
+
+    def get_gallery(self, username, query=None, headers=None):
+        headers = headers if headers else {}
+        query = query if query else ''
+        return self.get(f'/users/{username}/gallery{query}', headers=headers)

@@ -3,7 +3,7 @@ Feature: As a user I want to make an account
     Given A user named "Behave_Test" does not exist
 
   Scenario: A new account is created
-    Given I register an account with username "Behave_Test" and email "photomosaic.api@gmail.com"
+    Given A new account has just been created with username "Behave_Test" and email "photomosaic.api@gmail.com"
     Then The status should be ok
     And An email should have been sent
 

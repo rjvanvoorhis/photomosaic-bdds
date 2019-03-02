@@ -1,0 +1,13 @@
+# environments
+.env
+postactivate
+postdeactivate
+
+# IDE
+.idea/*
+
+
+__pycache__/*
+.*__pycache__/*
+mongodb_volume/*
+s3_volume/*

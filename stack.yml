@@ -1,0 +1,16 @@
+provider:
+  name: faas
+  gateway: http://10.0.0.237:8080
+
+functions:
+  mosaic-healthcheck:
+    skip_build: true
+    image: ryanjvanvoorhis/mosaic-healthcheck:latest
+    environment:
+     MOSAIC_API_URL: http://mosaic-api:5000/api/v1/photomosaic
+
+  mosaic-maker:
+    image: ryanjvanvoorhis/mosaic-maker:latest
+    skip_build: true
+    environment:
+      MOSAIC_API_URL: http://mosaic-api:5000/api/v1/photomosaic
