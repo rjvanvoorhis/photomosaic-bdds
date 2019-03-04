@@ -34,6 +34,7 @@ class Environment(object):
         ]
         self.fields = [
             'broadcast_ip',
+            'fe_port',
             's3_port',
             'mongodb_port',
             'mosaic_api_port',
@@ -60,6 +61,7 @@ class Environment(object):
         self.environ = {
             'local': {
                 'broadcast_ip': broadcast_ip,
+                'fe_port': 8082,
                 's3_port': 81,
                 'mongodb_port': 27019,
                 'mosaic_api_port': 5001,
@@ -82,32 +84,9 @@ class Environment(object):
                 'user_email': 'photomosaic.api.user@gmail.com',
                 'behave_password': ''
             },
-            'docker_compose': {
+            'swarm': {
                 'broadcast_ip': broadcast_ip,
-                's3_port': 81,
-                'mongodb_port': 27017,
-                'mosaic_api_port': 5000,
-                'mosaic_api_host': 'mosaic-api',
-                'mock_mosaic_external_port': 5081,
-                'mock_mosaic_internal_port': 5080,
-                'photomosaic_port': 5080,
-                'photomosaic_domain': 'mock-mosaic-maker',
-                's3_endpoint_url': 'http://local-s3:80/',
-                's3_external_url': f'http://{broadcast_ip}:81',
-                'mosaic_api_url_internal': 'http://mosaic-api:5000/api/v1/photomosaic',
-                'mosaic_api_url_external': f'http://{broadcast_ip}:5081/api/v1/photomosaic',
-                'mail_username': '',
-                'mail_password': '',
-                's3_data_directory': os.path.abspath('s3_volume'),
-                'mongodb_data_directory': os.path.abspath('mongodb_volume'),
-                'admin_username': 'behave_admin_user',
-                'admin_email': 'photomosaic.api.admin@gmail.com',
-                'user_username': 'behave_basic_user',
-                'user_email': 'photomosaic.api.user@gmail.com',
-                'behave_password': ''
-            },
-           'swarm': {
-                'broadcast_ip': broadcast_ip,
+                'fe_port': 8081,
                 's3_port': 81,
                 'mongodb_port': 27017,
                 'mosaic_api_port': 5000,

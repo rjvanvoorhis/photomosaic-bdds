@@ -5,7 +5,7 @@ services:
     environment:
       - MOSAIC_API_URL=${MOSAIC_API_URL}
     ports:
-      - ${MOCK_MOSAIC_PORT}:5080
+      - ${MOCK_MOSAIC_EXTERNAL_PORT}:5080
 
   mosaic-api:
     build: .
@@ -20,7 +20,7 @@ services:
       - S3_EXTERNAL_URL=${S3_EXTERNAL_URL}
       - MOSAIC_API_URL_INTERNAL=${MOSAIC_API_URL_INTERNAL}
       - MOSAIC_API_URL_EXTERNAL=http://${BROADCAST_IP}:${MOSAIC_API_PORT}/api/v1/photomosaic
-      - FRONT_END_URL=http://{$BROADCAST_IP}:8081
+      - FRONT_END_URL=http://{$BROADCAST_IP}:${FE_PORT}
       - FAAS_URL=http://${PHOTOMOSAIC_DOMAIN}:${PHOTOMOSAIC_PORT}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
