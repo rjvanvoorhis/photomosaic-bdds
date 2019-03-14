@@ -61,7 +61,7 @@ class Environment(object):
         self.environ = {
             'local': {
                 'broadcast_ip': broadcast_ip,
-                'fe_port': 8082,
+                'fe_port': 80,
                 's3_port': 81,
                 'mongodb_port': 27019,
                 'mosaic_api_port': 5001,
@@ -86,7 +86,7 @@ class Environment(object):
             },
             'swarm': {
                 'broadcast_ip': broadcast_ip,
-                'fe_port': 8081,
+                'fe_port': 80,
                 's3_port': 81,
                 'mongodb_port': 27017,
                 'mosaic_api_port': 5000,
